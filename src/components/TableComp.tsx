@@ -1,39 +1,16 @@
 import Table from "react-bootstrap/Table";
-import { memo, useEffect, useState } from "react";
-import type { IUser } from "../type";
-import { v4 as uuid } from "uuid";
+import { memo } from "react";
 import { Button } from "react-bootstrap";
+import type { IUser } from "../type";
+
 interface ITableProps {
-  user: IUser;
-  searchText: string;
-}
-interface ITableState {
   users: IUser[];
-  editedUser?: IUser | null;
+  searchText: string;
+  onEditUser: (user: IUser) => void; 
 }
-const TableComp = ({ user, searchText }: ITableProps) => {
-  const [state, setState] = useState<ITableState>({
-    users: [
-      {
-        name: "Minaya",
-        sname: "Aliyeva",
-        city: "Baku",
-        gender: "female",
-        check: true,
-        id: "1",
-      },
-    ],
-    editedUser: null,
-  });
-  useEffect(() => {
-    if (user.name && user.sname) {
-      setState((prevState) => ({
-        ...prevState,
-        users: [...prevState.users, { ...user, id: uuid() }],
-      }));
-    }
-  }, [user]);
-  const filteredUsers = state.users.filter(
+
+const TableComp = ({ users, searchText, onEditUser }: ITableProps) => {
+  const filteredUsers = users.filter(
     (user) =>
       user.name.toLowerCase().includes(searchText.toLowerCase()) ||
       user.sname.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -44,12 +21,8 @@ const TableComp = ({ user, searchText }: ITableProps) => {
   const onDeleteUser = (id: string) => {
     setState((prevState) => ({
       ...prevState,
-      users: prevState.users.filter((user) => user.id !== id),
+      users: prevState.users.filter((user:IUser) => user.id !== id),
     }));
-  };
-  const onEditUser = (id: string) => {
-    const userToEdit = state.users.find((user) => user.id === id);
-    setState((prevState) => ({ ...prevState, editedUser: userToEdit }));
   };
 
   return (
@@ -57,37 +30,36 @@ const TableComp = ({ user, searchText }: ITableProps) => {
       <thead>
         <tr>
           <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Gender</th>
-          <th>City</th>
-          <th>Are you agree ?</th>
-          <th>Actions</th>
+          <th>İsim</th>
+          <th>Soyisim</th>
+          <th>Cinsiyet</th>
+          <th>Şehir</th>
+          <th>Onayladınız mı?</th>
+          <th>İşlemler</th>
         </tr>
       </thead>
       <tbody>
         {filteredUsers?.map((user, index) => {
           return (
             <tr key={index}>
-              <td>{index}</td>
+              <td>{index + 1}</td>
               <td>{user.name}</td>
               <td>{user.sname}</td>
               <td>{user.gender}</td>
               <td>{user.city}</td>
-              <td>{user.check ? "Yes" : "No"}</td>
+              <td>{user.check ? "Evet" : "Hayır"}</td>
               <td>
                 <Button
-                  children="Delete "
+                  children="Sil"
                   size="lg"
                   variant="danger"
                   onClick={() => onDeleteUser(user.id)}
                 />
-
                 <Button
-                  children="Edit "
+                  children="Düzenle"
                   size="lg"
                   variant="primary"
-                  onClick={() => onEditUser(user.id)}
+                  onClick={() => onEditUser(user)} 
                 />
               </td>
             </tr>

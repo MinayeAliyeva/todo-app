@@ -4,46 +4,74 @@ import TableComp from "./components/TableComp";
 import { useState } from "react";
 import type { IUser } from "./type";
 import { Form } from "react-bootstrap";
+
 export interface IState {
-  user: IUser;
+  users: IUser[];
   searchText: string;
 }
+
 const App = () => {
   const [state, setState] = useState<IState>({
-    user: {
-      name: "",
-      sname: "",
-      gender: "",
-      check: false,
-      city: "",
-      id:""
-    },
+    users: [
+      {
+        name: "Minaya",
+        sname: "Aliyeva",
+        gender: "female",
+        check: true,
+        city: "Baku",
+        id: "1",
+      },
+    ],
     searchText: "",
   });
+
+  const [editedUser, setEditedUser] = useState<IUser | null>(null);
 
   const onAddUser = (user: IUser) => {
     setState((prevState) => ({
       ...prevState,
-      user,
+      users: [...prevState.users, user], 
     }));
   };
+
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setState((prevState) => ({ ...prevState, searchText: event.target.value }));
   };
 
-  
+  const onEditUser = (user: IUser) => {
+    setEditedUser(user); 
+  };
+
+  const onUpdateUser = (updatedUser: IUser) => {
+    setState((prevState) => ({
+      ...prevState,
+      users: prevState.users.map(
+        (user) => (user.id === updatedUser.id ? updatedUser : user) 
+      ),
+    }));
+    setEditedUser(null); 
+  };
+
   return (
     <>
-      <FormComp onAddUser={onAddUser} />
+      <FormComp
+        onAddUser={onAddUser}
+        userToEdit={editedUser}
+        onUpdateUser={onUpdateUser}
+      />
       <Form.Control
         type="text"
         id="search"
         style={{ margin: "20px", width: "250px" }}
-        placeholder="Search By Name"
+        placeholder="Arama Yap"
         onChange={handleChange}
         name="search"
       />
-      <TableComp  user={state.user} searchText={state.searchText}  />
+      <TableComp
+        users={state.users}
+        searchText={state.searchText}
+        onEditUser={onEditUser}
+      />
     </>
   );
 };
