@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
+import type { IUser } from "../type";
 const cityOptions = [
   {
     key: "1",
@@ -17,31 +18,24 @@ const cityOptions = [
     label: "Shamkir",
   },
 ];
-export interface IState {
-  name: string;
-  sname: string;
-  city: string;
-  gender: string;
-  check: boolean;
-}
+
 interface IProps {
-  onAddUser: (user: IState) => void;
+  onAddUser: (user: IUser) => void;
 }
 const FormComp = ({ onAddUser }: IProps) => {
-  const [state, setState] = useState<IState>({
+  const [state, setState] = useState<IUser>({
     name: "",
     sname: "",
     city: "",
     check: false,
     gender: "",
+    id:""
   });
+
   const handleChange: React.ChangeEventHandler<
     HTMLInputElement & HTMLSelectElement
   > = (event) => {
-    console.log(event);
     const { name, value, checked } = event.target;
-    console.log({ name, value, checked });
-
     if (name === "check") {
       setState((prevState) => ({
         ...prevState,
@@ -70,6 +64,7 @@ const FormComp = ({ onAddUser }: IProps) => {
           style={{ marginBottom: "20px" }}
           onChange={handleChange}
           name="name"
+          defaultValue={"m"}
         />
         <Form.Label htmlFor="sname">Sname</Form.Label>
         <Form.Control
