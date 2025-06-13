@@ -1,13 +1,14 @@
 import FormComp from "./components/FormComp";
 import "./App.css";
 import TableComp from "./components/TableComp";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { IUser } from "./type";
 import { Form } from "react-bootstrap";
 
 export interface IState {
   users: IUser[];
   searchText: string;
+  copyUsers: IUser[];
 }
 
 const App = () => {

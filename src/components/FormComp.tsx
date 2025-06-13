@@ -45,6 +45,13 @@ const FormComp = ({ onAddUser, userToEdit }: IProps) => {
       [name]: value,
     }));
   };
+  useEffect(() => {
+    if (userToEdit) {
+      setUser(userToEdit);
+    }
+  }, [userToEdit]);
+
+
 
   const handleSubmit = () => {
     if (user.name && user.sname && user.city && user.gender) {

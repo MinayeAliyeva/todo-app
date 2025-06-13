@@ -38,7 +38,7 @@ const TableComp = ({
         </tr>
       </thead>
       <tbody>
-        {filteredUsers?.map((user, index) => {
+        {users?.map((user, index) => {
           return (
             <tr key={index}>
               <td>{index + 1}</td>
