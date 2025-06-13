@@ -1,7 +1,7 @@
 import FormComp from "./components/FormComp";
 import "./App.css";
 import TableComp from "./components/TableComp";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import type { IUser } from "./type";
 import { Form } from "react-bootstrap";
 
@@ -24,6 +24,16 @@ const App = () => {
       },
     ],
     searchText: "",
+    copyUsers: [
+      {
+        name: "Minaya",
+        sname: "Aliyeva",
+        gender: "female",
+        check: true,
+        city: "Baku",
+        id: "1",
+      },
+    ],
   });
 
   const [editedUser, setEditedUser] = useState<IUser | null>(null);
@@ -42,6 +52,14 @@ const App = () => {
             return item;
           })
         : [...prevState.users, user],
+      copyUsers: isEditedMode
+        ? prevState.users.map((item) => {
+            if (item.id === user.id) {
+              return user;
+            }
+            return item;
+          })
+        : [...prevState.users, user],
     }));
   };
 
@@ -53,13 +71,22 @@ const App = () => {
     setEditedUser(user);
   };
 
-
   const onDeleteUser = (id: string) => {
     setState((prevState) => ({
       ...prevState,
       users: prevState.users.filter((user: IUser) => user.id !== id),
+      copyUsers: prevState.users.filter((user: IUser) => user.id !== id),
     }));
   };
+
+  const filteredUsers = state.users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(state.searchText) ||
+      user.sname.toLowerCase().includes(state.searchText) ||
+      user.city.toLowerCase().includes(state.searchText) ||
+      user.gender.toLowerCase().includes(state.searchText)
+  );
+
   return (
     <>
       <FormComp onAddUser={onAddUser} userToEdit={editedUser} />
@@ -72,8 +99,7 @@ const App = () => {
         name="search"
       />
       <TableComp
-        users={state.users}
-        searchText={state.searchText}
+        users={filteredUsers}
         onEditUser={onEditUser}
         onDeleteUser={onDeleteUser}
       />

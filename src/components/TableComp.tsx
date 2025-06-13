@@ -5,24 +5,18 @@ import type { IUser } from "../type";
 
 interface ITableProps {
   users: IUser[];
-  searchText: string;
+
   onEditUser: (user: IUser) => void;
   onDeleteUser: (id: string) => void;
 }
 
 const TableComp = ({
   users,
-  searchText,
+
   onEditUser,
   onDeleteUser,
 }: ITableProps) => {
-  const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      user.sname.toLowerCase().includes(searchText.toLowerCase()) ||
-      user.city.toLowerCase().includes(searchText.toLowerCase()) ||
-      user.gender.toLowerCase().includes(searchText.toLowerCase())
-  );
+
 
   return (
     <Table striped bordered hover style={{ marginTop: "50px" }}>
@@ -38,7 +32,7 @@ const TableComp = ({
         </tr>
       </thead>
       <tbody>
-        {users?.map((user, index) => {
+        { users?.map((user, index) => {
           return (
             <tr key={index}>
               <td>{index + 1}</td>
