@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { v4 as uuid } from "uuid";
 import { Button, Card, Form } from "react-bootstrap";
 import type { IUser } from "../type";
 
@@ -24,6 +23,11 @@ const FormComp = ({ onAddUser, userToEdit }: IProps) => {
     id: "",
   });
 
+  useEffect(() => {
+    if (userToEdit) {
+      setUser(userToEdit);
+    }
+  }, [userToEdit]);
 
   const handleChange: React.ChangeEventHandler<
     HTMLInputElement & HTMLSelectElement
@@ -47,9 +51,11 @@ const FormComp = ({ onAddUser, userToEdit }: IProps) => {
     }
   }, [userToEdit]);
 
+
+
   const handleSubmit = () => {
     if (user.name && user.sname && user.city && user.gender) {
-      onAddUser({ ...user, id: user.id || uuid() });
+      onAddUser(user);
       setUser({
         name: "",
         sname: "",

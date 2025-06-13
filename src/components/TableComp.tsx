@@ -1,7 +1,8 @@
 import Table from "react-bootstrap/Table";
 import { memo } from "react";
-import type { IUser } from "../type";
 import { Button } from "react-bootstrap";
+import type { IUser } from "../type";
+
 interface ITableProps {
   users: IUser[];
   searchText: string;
@@ -28,34 +29,33 @@ const TableComp = ({
       <thead>
         <tr>
           <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Gender</th>
-          <th>City</th>
-          <th>Are you agree ?</th>
-          <th>Actions</th>
+          <th>İsim</th>
+          <th>Soyisim</th>
+          <th>Cinsiyet</th>
+          <th>Şehir</th>
+          <th>Onayladınız mı?</th>
+          <th>İşlemler</th>
         </tr>
       </thead>
       <tbody>
         {users?.map((user, index) => {
           return (
             <tr key={index}>
-              <td>{index}</td>
+              <td>{index + 1}</td>
               <td>{user.name}</td>
               <td>{user.sname}</td>
               <td>{user.gender}</td>
               <td>{user.city}</td>
-              <td>{user.check ? "Yes" : "No"}</td>
+              <td>{user.check ? "Evet" : "Hayır"}</td>
               <td>
                 <Button
-                  children="Delete "
+                  children="Sil"
                   size="lg"
                   variant="danger"
                   onClick={() => onDeleteUser(user.id)}
                 />
-
                 <Button
-                  children="Edit "
+                  children="Düzenle"
                   size="lg"
                   variant="primary"
                   onClick={() => onEditUser(user)}

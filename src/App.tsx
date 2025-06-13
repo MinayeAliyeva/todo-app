@@ -23,62 +23,43 @@ const App = () => {
         id: "1",
       },
     ],
-    copyUsers: [],
     searchText: "",
   });
 
   const [editedUser, setEditedUser] = useState<IUser | null>(null);
+
   const onAddUser = (user: IUser) => {
     const exsistedUser = state.users.find((item) => item.id === user.id);
+    const isEditedMode = !!exsistedUser;
+
     setState((prevState) => ({
       ...prevState,
-
-      users: exsistedUser
+      users: isEditedMode
         ? prevState.users.map((item) => {
-            if (item.id === exsistedUser.id) {
-              return user;
-            }
-            return item;
-          })
-        : [...prevState.users, user],
-      copyUsers: exsistedUser
-        ? prevState.users.map((item) => {
-            if (item.id === exsistedUser.id) {
+            if (item.id === user.id) {
               return user;
             }
             return item;
           })
         : [...prevState.users, user],
     }));
+  };
+
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    setState((prevState) => ({ ...prevState, searchText: event.target.value }));
   };
 
   const onEditUser = (user: IUser) => {
     setEditedUser(user);
   };
-  const handleSearchChange: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    const searchedUsers = state.users.filter(
-      (user) =>
-        user.name.toLowerCase().includes(event.target.value.toLowerCase()) ||
-        user.sname.toLowerCase().includes(event.target.value.toLowerCase()) ||
-        user.city.toLowerCase().includes(event.target.value.toLowerCase()) ||
-        user.gender.toLowerCase().includes(event.target.value.toLowerCase())
-    );
-    console.log({ searchedUsers, value: event.target.value });
 
-    setState((prevState) => ({
-      ...prevState,
-      users: event.target.value ? searchedUsers : state.copyUsers,
-    }));
-  };
+
   const onDeleteUser = (id: string) => {
     setState((prevState) => ({
       ...prevState,
-      users: prevState.users.filter((user) => user.id !== id),
+      users: prevState.users.filter((user: IUser) => user.id !== id),
     }));
   };
-
   return (
     <>
       <FormComp onAddUser={onAddUser} userToEdit={editedUser} />
@@ -87,7 +68,7 @@ const App = () => {
         id="search"
         style={{ margin: "20px", width: "250px" }}
         placeholder="Arama Yap"
-        onChange={handleSearchChange}
+        onChange={handleChange}
         name="search"
       />
       <TableComp
