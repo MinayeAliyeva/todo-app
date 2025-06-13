@@ -11,10 +11,9 @@ const cityOptions = [
 interface IProps {
   onAddUser: (user: IUser) => void;
   userToEdit: IUser | null;
-  onUpdateUser: (user: IUser) => void;
 }
 
-const FormComp = ({ onAddUser, userToEdit, onUpdateUser }: IProps) => {
+const FormComp = ({ onAddUser, userToEdit }: IProps) => {
   const [user, setUser] = useState<IUser>({
     name: "",
     sname: "",
@@ -49,11 +48,7 @@ const FormComp = ({ onAddUser, userToEdit, onUpdateUser }: IProps) => {
 
   const handleSubmit = () => {
     if (user.name && user.sname && user.city && user.gender) {
-      if (user.id) {
-        onUpdateUser(user); 
-      } else {
-        onAddUser(user);
-      }
+      onAddUser(user);
       setUser({
         name: "",
         sname: "",
@@ -139,7 +134,7 @@ const FormComp = ({ onAddUser, userToEdit, onUpdateUser }: IProps) => {
           checked={user.check}
         />
         <Button
-          children={userToEdit ? "Güncelle" : "Ekle"}
+          children={user.id ? "Güncelle" : "Ekle"}
           size="lg"
           style={{ width: "400px", marginTop: "20px" }}
           onClick={handleSubmit}

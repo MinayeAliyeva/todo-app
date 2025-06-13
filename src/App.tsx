@@ -28,9 +28,19 @@ const App = () => {
   const [editedUser, setEditedUser] = useState<IUser | null>(null);
 
   const onAddUser = (user: IUser) => {
+    const exsistedUser = state.users.find((item) => item.id === user.id);
+    const isEditedMode = !!exsistedUser;
+
     setState((prevState) => ({
       ...prevState,
-      users: [...prevState.users, user], 
+      users: isEditedMode
+        ? prevState.users.map((item) => {
+            if (item.id === user.id) {
+              return user;
+            }
+            return item;
+          })
+        : [...prevState.users, user],
     }));
   };
 
@@ -39,26 +49,19 @@ const App = () => {
   };
 
   const onEditUser = (user: IUser) => {
-    setEditedUser(user); 
+    setEditedUser(user);
   };
 
-  const onUpdateUser = (updatedUser: IUser) => {
+
+  const onDeleteUser = (id: string) => {
     setState((prevState) => ({
       ...prevState,
-      users: prevState.users.map(
-        (user) => (user.id === updatedUser.id ? updatedUser : user) 
-      ),
+      users: prevState.users.filter((user: IUser) => user.id !== id),
     }));
-    setEditedUser(null); 
   };
-
   return (
     <>
-      <FormComp
-        onAddUser={onAddUser}
-        userToEdit={editedUser}
-        onUpdateUser={onUpdateUser}
-      />
+      <FormComp onAddUser={onAddUser} userToEdit={editedUser} />
       <Form.Control
         type="text"
         id="search"
@@ -71,6 +74,7 @@ const App = () => {
         users={state.users}
         searchText={state.searchText}
         onEditUser={onEditUser}
+        onDeleteUser={onDeleteUser}
       />
     </>
   );

@@ -6,10 +6,16 @@ import type { IUser } from "../type";
 interface ITableProps {
   users: IUser[];
   searchText: string;
-  onEditUser: (user: IUser) => void; 
+  onEditUser: (user: IUser) => void;
+  onDeleteUser: (id: string) => void;
 }
 
-const TableComp = ({ users, searchText, onEditUser }: ITableProps) => {
+const TableComp = ({
+  users,
+  searchText,
+  onEditUser,
+  onDeleteUser,
+}: ITableProps) => {
   const filteredUsers = users.filter(
     (user) =>
       user.name.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -17,13 +23,6 @@ const TableComp = ({ users, searchText, onEditUser }: ITableProps) => {
       user.city.toLowerCase().includes(searchText.toLowerCase()) ||
       user.gender.toLowerCase().includes(searchText.toLowerCase())
   );
-
-  const onDeleteUser = (id: string) => {
-    setState((prevState) => ({
-      ...prevState,
-      users: prevState.users.filter((user:IUser) => user.id !== id),
-    }));
-  };
 
   return (
     <Table striped bordered hover style={{ marginTop: "50px" }}>
@@ -59,7 +58,7 @@ const TableComp = ({ users, searchText, onEditUser }: ITableProps) => {
                   children="Düzenle"
                   size="lg"
                   variant="primary"
-                  onClick={() => onEditUser(user)} 
+                  onClick={() => onEditUser(user)}
                 />
               </td>
             </tr>
